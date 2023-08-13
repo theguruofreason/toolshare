@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "description": "Share your tools!",
   "main": "index.js",
-  "scripts": {
+	"scripts": {
+		"nodemon": "nodemon dist/app.js"
+    "lint": "npx eslint . --ext .ts",
+    "start": "node dist/app.js",
+    "compile": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +21,18 @@
   },
   "homepage": "https://github.com/theguruofreason/toolshare#readme",
   "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
+    "eslint": "^8.47.0",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "hbs": "^4.2.0",
+    "mysql": "^2.18.1",
+    "nodemon": "^3.0.1"
   }
 }
