@@ -1,0 +1,22 @@
+{
+  "name": "toolshare",
+  "version": "0.0.1",
+  "description": "Share your tools!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theguruofreason/toolshare.git"
+  },
+  "author": "Iden Busia",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/theguruofreason/toolshare/issues"
+  },
+  "homepage": "https://github.com/theguruofreason/toolshare#readme",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
