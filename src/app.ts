@@ -1,28 +1,29 @@
 import express from "express";
-import mysql from "mysql";
-import dotenv from "dotenv";
+import * as reg from "./user";
+import winston from "winston";
 
 const app = express();
 const port = 3000;
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.Console()
+  ]
+});
 
-dotenv.config({ path: "./.env"})
-const db = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE
-})
-db.connect((error) => {
-    if(error) {
-        console.log(error)
-    } else {
-        console.log("MySQL connected!")
-    }
-})
+app.use(express.urlencoded({extended: false}));
+app.use(express.json);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/register", (req, res) => {
+
+});
+
+app.get("/login", (req, res) => {
+
+});
+
 app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
+  return logger.info(`Express is listening at http://localhost:${port}`);
 });
