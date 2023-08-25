@@ -1,6 +1,9 @@
 import express from "express";
-import * as reg from "./user";
+import * as user from "./user";
 import winston from "winston";
+import bodyParser from "body-parser";
+import multer from "multer";
+const upload = multer();
 
 const app = express();
 const port = 3000;
@@ -10,20 +13,20 @@ const logger = winston.createLogger({
   ]
 });
 
-app.use(express.urlencoded({extended: false}));
-app.use(express.json);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/register", (req, res) => {
-
+app.post("/register", upload.none(), (req, res) => {
+  return user.RegisterUser(req, res);
 });
 
-app.get("/login", (req, res) => {
-
+app.post("/login", (req, res) => {
+  return res;
 });
 
-app.listen(port, () => {
-  return logger.info(`Express is listening at http://localhost:${port}`);
+app.listen(port, "localhost", () => {
+  logger.info(`Express is listening at http://localhost:${port}`);
 });
