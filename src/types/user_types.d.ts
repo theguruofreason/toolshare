@@ -1,6 +1,7 @@
-export type RegisterUserRequest = {
+export type RegisterUserRequest = UserInfo;
+
+export type LoginUserRequest = {
   name: string;
-  email: string;
   password: string;
 }
 

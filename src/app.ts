@@ -1,30 +1,38 @@
 import express from "express";
 import * as user from "./user";
-import winston from "winston";
 import bodyParser from "body-parser";
 import multer from "multer";
+import { logger } from "./logger";
 const upload = multer();
 
 const app = express();
 const port = 3000;
-const logger = winston.createLogger({
-  transports: [
-    new winston.transports.Console()
-  ]
-});
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.post("/register", upload.none(), (req, res) => {
-  return user.RegisterUser(req, res);
+app.post("/register", upload.none(), async (req, res) => {
+  try {
+    await user.RegisterUser(req, res);
+  } catch (e) {
+    logger.error(e);
+    res.statusMessage = e;
+    res.status(500);
+  }
+  res.send();
 });
 
-app.post("/login", (req, res) => {
-  return res;
+app.get("/login", async (req, res) => {
+  try {
+    await user.LoginUser(req, res);
+  } catch (e) {
+    logger.error(e);
+    res.status(500);
+  }
+  res.send();
 });
 
 app.listen(port, "localhost", () => {

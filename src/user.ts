@@ -1,27 +1,49 @@
 import bcrypt from "bcryptjs";
-import { DBAgent } from "./dbAgent";
-import { RegisterUserRequest } from "./types/user_types";
+import { PrismaClient } from "@prisma/client";
+import { LoginUserRequest, RegisterUserRequest } from "./types/user_types";
+import { logger } from "./logger";
 
-export function RegisterUser (req, res) {
+const prisma = new PrismaClient();
+
+export async function RegisterUser (req, res) {
   const requestBody: RegisterUserRequest = req.body;
-  const dbAgent = DBAgent.Instance;
-  const db = dbAgent.db;
-  db.execute("SELECT * FROM `users` where `name` = ?", [requestBody.name], (err, results) => {
-    if (err) {
-      res.body = err;
-      res.send();
+  const existingUser = await prisma.users.findFirst({
+    where: {
+      name: requestBody.name,
     }
-    if ((results as Array<any>).length == 1) {
-      res.body = "Username taken.";
-      res.statusCode = 200;
-    }
-    else {
-      dbAgent.INSERT_USER({
-        name: requestBody.name,
-        email: requestBody.email,
-        password: requestBody.password
+  });
+  if (existingUser) {
+    res.statusCode = 409;
+    res.statusMessage = "Username already registered.";
+    return;
+  } else {
+    await bcrypt.hash(requestBody.password, 10).then(async pass => {
+      await prisma.users.create({
+        data: {
+          name: requestBody.name,
+          email: requestBody.email,
+          password: pass
+        }
       });
+    });
+    res.statusCode = 200;
+  }
+}
+
+export async function LoginUser (req, res) {
+  function badLogin () {
+    logger.info(`Failed login: ${user.name}`);
+    res.statusCode = 401;
+    res.statusMessage = "Bad username or password.";
+  }
+  const query: LoginUserRequest = req.query;
+  const user = await prisma.users.findFirst({
+    where: {
+      name: query.name
     }
-    res.send();
+  });
+  if (!user) badLogin();
+  await bcrypt.compare(query.password, user.password).then( result => {
+    if (!result) badLogin();
   });
 }
