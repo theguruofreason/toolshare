@@ -1,8 +1,21 @@
+import * as u from "../user/user_controller";
 import express from "express";
-import { RegisterUser } from "../user";
+import multer from "multer";
 
-const router = express.Router();
+const upload = multer();
+const userRoutes = express.Router();
 
-router.post("/register", (req, res) => {
-  return RegisterUser(req, res);
+userRoutes.post("", upload.none(), async (req, res, next) => {
+  await u.registerUser(req, res);
+  next();
 });
+userRoutes.get("", async (req, res, next) => {
+  await u.loginUser(req, res);
+  next();
+});
+userRoutes.delete("", async (req, res, next) => {
+  await u.deleteUser(req, res);
+  next();
+});
+
+export { userRoutes };

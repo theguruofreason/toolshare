@@ -1,7 +1,7 @@
 import mysql2 from "mysql2";
 import dotenv from "dotenv";
 import winston from "winston";
-import { UserInfo } from "./types/user_types";
+import { UserInfo } from "./user/user_types";
 
 export class DBAgent
 {

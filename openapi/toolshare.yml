@@ -1,0 +1,66 @@
+openapi: 3.1.0
+info: 
+  title: toolshare
+  version: 1.0.0
+  description: Online tool library. Easy to setup.
+
+servers: 
+  - url: http://api.example.com/v1
+    description: nothing
+
+paths: 
+  /user:
+    post:
+      operationId: registerUser
+      summary: Register a user on the server.
+      requestBody: 
+        content: 
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request.
+        default: 
+          description: A failure!
+    get: 
+      operationId: loginUser
+      summary: Log a user in to the server.
+      responses: 
+        '200':
+          description: OK
+        '400':
+          description: Bad request.
+        '401':
+          description: Bad username or password.
+        default: 
+          description: A failure!
+    delete: 
+      operationId: deleteUser
+      summary: Delete the user record from the server.
+      responses: 
+        '200':
+          description: OK
+        '400':
+          description: Bad request.
+        default: 
+          description: A failure!
+
+          
+components: 
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Username.
+        email:
+          type: string
+          description: User's email.
+          format: email
+        password:
+          type: string
+          description: User's password.
