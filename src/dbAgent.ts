@@ -1,3 +1,5 @@
+/**
+  * deprecated
 import mysql2 from "mysql2";
 import dotenv from "dotenv";
 import winston from "winston";
@@ -51,3 +53,4 @@ export class DBAgent
     );
   }
 }
+*/
