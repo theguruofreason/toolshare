@@ -32,5 +32,8 @@
             "error",
             "always"
         ]
-    }
+    },
+    "ignores": [
+        "*.spec.js"
+    ]
 }

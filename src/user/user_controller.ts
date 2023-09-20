@@ -6,23 +6,25 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-export async function registerUser (req: Request, res: Response) {
-  const requestBody: RegisterUserRequest = req.body;
+export async function registerUser (req: RegisterUserRequest, res: Response) {
   const existingUser = await prisma.users.findFirst({
     where: {
-      name: requestBody.name,
+      OR: [
+        { name: req.name },
+        { email: req.email}
+      ]
     }
   });
   if (existingUser) {
     res.statusCode = 409;
-    res.statusMessage = "Username already registered.";
+    res.statusMessage = "Username or email already registered.";
     return;
   } else {
-    await bcrypt.hash(requestBody.password, 10).then(async pass => {
+    await bcrypt.hash(req.password, 10).then(async pass => {
       await prisma.users.create({
         data: {
-          name: requestBody.name,
-          email: requestBody.email,
+          name: req.name,
+          email: req.email,
           password: pass
         }
       });
